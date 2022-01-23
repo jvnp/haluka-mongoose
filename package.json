@@ -1,0 +1,46 @@
+{
+  "name": "haluka-mongoose",
+  "description": "**Mongoose based ODM Provider for Haluka Framework**",
+  "version": "1.0.0",
+  "main": "./build/index.js",
+  "dependencies": {
+    "@haluka/core": "github:halukajs/core",
+    "passport": "^0.5.2"
+  },
+  "devDependencies": {
+    "nyc": "^15.1.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4",
+    "chai": "^4.3.4",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.1.0",
+    "mocha": "^9.1.3",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "cross-env NODE_ENV=test mocha -r ts-node/register test/**/*.ts",
+    "test:cover": "nyc --reporter=html npm test",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvnp/haluka-mongoose.git"
+  },
+  "keywords": [
+    "mongoose",
+    "haluka-mongoose",
+    "haluka",
+    "halukajs",
+    "halukadev"
+  ],
+  "author": "Jeevan Prakash Pant",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jvnp/haluka-mongoose/issues"
+  },
+  "homepage": "https://github.com/jvnp/haluka-mongoose#readme"
+}
