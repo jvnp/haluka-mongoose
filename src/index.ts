@@ -16,9 +16,7 @@ export default class MongooseServiceProvider extends ServiceProvider implements 
 
 			let mongooseConfig = config('mongoose')
 
-			// TODO 1: Connection Class
-
-			// TODO 2: Return Connections
+			return 0
 
 		})
 	}
