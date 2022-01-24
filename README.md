@@ -20,6 +20,20 @@ npm install https://github.com/jvnp/haluka-mongoose
 
 NOTE: It can be later migrated to `halukajs`.
 
+## Testing
+
+Quick test
+
+```bash
+npm test
+```
+
+Test with coverage report
+
+```bash
+npm test -- --coverage
+```
+
 ## Documentation
 
 Checkout [Haluka Box](https://haluka.dev/box) site for documentation and examples.
