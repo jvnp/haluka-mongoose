@@ -16,16 +16,16 @@ export default class MongooseManager {
     /**
      * Check if database is connected
      */
-    private booted: boolean;
+    private _booted: boolean;
 
     /**
      * Array of connections
      */
-    protected connections: any[];
+    protected connections: any[] = [];
 
-    constructor(config: any): any {
+    constructor(config: any) {
         this.config = config;
-        this.booted = false;
+        this._booted = false;
     }
 
     private function createConnection(conf): Promise<any> {
@@ -34,7 +34,7 @@ export default class MongooseManager {
         return conn
     };
 
-    private function setup (): Promise<void> {
+    private setup (): Promise<void> {
 		// Setup All Database
 		for (var conf in this.config.connections) {
 			var connection = this.config.connections[conf]
@@ -44,25 +44,25 @@ export default class MongooseManager {
 		if (!!this.config['default'] && !!this.config['connections'] && this.config.default in this.config['connections']) {
 			this.connections['default'] = this.connections[this.config.default]
 		}
-		this.booted = true;
+		this._booted = true;
 	}
 
-	private function booted (): boolean {
-		return this.booted;
+	private booted (): boolean {
+		return this._booted;
 	}
 
-	public function default ():any {
+	public  default ():any {
 		return this.connections['default'];
 	}
 
-	function using (conn): any {
+	using (conn): any {
 		if (this.connections[conn])
 			return this.connections[conn]
 		else
 			throw new Error(`No database connection exists  with name '${conn}'. Please check your database config.`)
 	}
 
-	async function close (conn): void {
+	async close (conn): void {
 		if (!!this.connections[conn]) {
             await (this.connections[conn]).close()
             // TODO: fire event (if needed)
@@ -70,7 +70,7 @@ export default class MongooseManager {
 		}
 	}
 
-	async function closeAll (): void {
+	async closeAll (): void {
 		for (var conn in _.omit(this.connections, ['default'])) {
             await this.close(conn)
             // TODO: fire event (if needed)
