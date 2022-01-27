@@ -5,9 +5,12 @@
   "main": "./build/index.js",
   "dependencies": {
     "@haluka/core": "github:halukajs/core",
-    "mongoose": "^6.1.7"
+    "lodash": "^4.17.21",
+    "mongoose": "^6.1.8"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.178",
+    "@types/mongoose": "^5.11.97",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "cross-env": "^7.0.3",
