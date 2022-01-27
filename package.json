@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",
-    "@types/mongoose": "^5.11.97",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "cross-env": "^7.0.3",
