@@ -19,7 +19,7 @@ export default class MongooseManager {
     /**
       * Configs from configuaration file
       */
-    protected config: any;
+    protected config: IMongooseConfig;
 
     /**
      * Check if database is connected
@@ -30,24 +30,24 @@ export default class MongooseManager {
     /**
      * Array of connections
      */
-    protected connections: any[] = [];
+    protected connections: Connection[] = [];
 
-    constructor(config: any, app: Application) {
+    constructor(config: IMongooseConfig, app: Application) {
         this.config = config;
 		this.app = app;
         this._booted = false;
     }
 
-    private createConnection (conf: IConnectionConfig): Connection {
+    private async mongoConnect (conf: IConnectionConfig): Connection {
         var connString = `mongodb://${conf.username}:${conf.password}@${conf.host}:${conf.port}/${conf.database}`;
-		return createConnection(connString, Object.assign({ useNewUrlParser: true }, conf.options));
+		return await createConnection(connString, Object.assign({ useNewUrlParser: true }, conf.options));
     }
 
-    public setup () {
+    public async setup () {
 		// Setup All Database
 		for (var conf in this.config.connections) {
 			var connection = this.config.connections[conf]
-			this.connections[conf] = this.createConnection(connection)
+			this.connections[conf] = await this.mongoConnect(connection)
 			this.app.use<any>('Haluka/Core/Events').fire('Database.Connected', conf, connection)
 		}
 		if (!!this.config['default'] && !!this.config['connections'] && this.config.default in this.config['connections']) {
@@ -94,4 +94,9 @@ export interface IConnectionConfig {
 	port: number | string
 	database: string,
 	options: ConnectOptions
+}
+
+export interface IMongooseConfig {
+	default: string,
+	connections: { [key: string]: IConnectionConfig; }
 }
