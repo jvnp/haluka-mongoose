@@ -1,5 +1,7 @@
-import * as mongoose from 'mongoose'
+'use strict'
+
 import * as _ from 'lodash';
+import { createConnection, Connection, ConnectOptions } from 'mongoose'
 import { Application } from '@haluka/core';
 
 /**
@@ -36,18 +38,17 @@ export default class MongooseManager {
         this._booted = false;
     }
 
-    private function createConnection(conf): Promise<any> {
+    private createConnection (conf: IConnectionConfig): Connection {
         var connString = `mongodb://${conf.username}:${conf.password}@${conf.host}:${conf.port}/${conf.database}`;
-        var conn = await mongoose.createConnection(connString, Object.assign({ useNewUrlParser: true }, conf.options));
-        return conn
-    };
+		return createConnection(connString, Object.assign({ useNewUrlParser: true }, conf.options));
+    }
 
-    private setup (): Promise<void> {
+    public setup () {
 		// Setup All Database
 		for (var conf in this.config.connections) {
 			var connection = this.config.connections[conf]
-			this.connections[conf] = await createConnection(connection)
-			this.app.use('Axe/Events').fire('Database.Connected', conf, connection)
+			this.connections[conf] = this.createConnection(connection)
+			this.app.use<any>('Haluka/Core/Events').fire('Database.Connected', conf, connection)
 		}
 		if (!!this.config['default'] && !!this.config['connections'] && this.config.default in this.config['connections']) {
 			this.connections['default'] = this.connections[this.config.default]
@@ -85,4 +86,13 @@ export default class MongooseManager {
 		}
 	}
 
+}
+
+export interface IConnectionConfig {
+	username: string
+	password: string
+	host: string
+	port: number | string
+	database: string,
+	options: ConnectOptions
 }
