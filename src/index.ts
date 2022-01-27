@@ -16,9 +16,8 @@ export default class MongooseServiceProvider extends ServiceProvider implements 
 	public register (): void {
 		this.app.singleton('Mongoose/Manager', function (app: Application) {
 
-			// const mongooseConfig = config('mongoose')
-			const mongooseConfig = ('../test/config/mongoose')
-			return new MongooseManager(mongooseConfig)
+			const mongooseConfig = config('mongoose')
+			return new MongooseManager(mongooseConfig, app)
 
 		})
 	}

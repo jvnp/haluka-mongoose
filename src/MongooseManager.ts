@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose'
 import * as _ from 'lodash';
+import { Application } from '@haluka/core';
 
 /**
  * @name HalukaMongoose
@@ -7,6 +8,11 @@ import * as _ from 'lodash';
  */
 
 export default class MongooseManager {
+
+	/**
+     * Haluka Application Instance
+     */
+	protected app: Application;
 
     /**
       * Configs from configuaration file
@@ -18,13 +24,15 @@ export default class MongooseManager {
      */
     private _booted: boolean;
 
+
     /**
      * Array of connections
      */
     protected connections: any[] = [];
 
-    constructor(config: any) {
+    constructor(config: any, app: Application) {
         this.config = config;
+		this.app = app;
         this._booted = false;
     }
 
