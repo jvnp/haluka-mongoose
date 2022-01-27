@@ -1,5 +1,8 @@
-import * as mongoose from 'mongoose'
+'use strict'
+
 import * as _ from 'lodash';
+import { createConnection, Connection, ConnectOptions } from 'mongoose'
+import { Application } from '@haluka/core';
 
 /**
  * @name HalukaMongoose
@@ -8,73 +11,92 @@ import * as _ from 'lodash';
 
 export default class MongooseManager {
 
+	/**
+     * Haluka Application Instance
+     */
+	protected app: Application;
+
     /**
       * Configs from configuaration file
       */
-    protected config: any;
+    protected config: IMongooseConfig;
 
     /**
      * Check if database is connected
      */
-    private booted: boolean;
+    private _booted: boolean;
+
 
     /**
      * Array of connections
      */
-    protected connections: any[];
+    protected connections: Connection[] = [];
 
-    constructor(config: any): any {
+    constructor(config: IMongooseConfig, app: Application) {
         this.config = config;
-        this.booted = false;
+		this.app = app;
+        this._booted = false;
     }
 
-    private function createConnection(conf): Promise<any> {
+    private async mongoConnect (conf: IConnectionConfig): Connection {
         var connString = `mongodb://${conf.username}:${conf.password}@${conf.host}:${conf.port}/${conf.database}`;
-        var conn = await mongoose.createConnection(connString, Object.assign({ useNewUrlParser: true }, conf.options));
-        return conn
-    };
+		return await createConnection(connString, Object.assign({ useNewUrlParser: true }, conf.options));
+    }
 
-    private function setup (): Promise<void> {
+    public async setup () {
 		// Setup All Database
 		for (var conf in this.config.connections) {
 			var connection = this.config.connections[conf]
-			this.connections[conf] = await createConnection(connection)
-			this.app.use('Axe/Events').fire('Database.Connected', conf, connection)
+			this.connections[conf] = await this.mongoConnect(connection)
+			this.app.use<any>('Haluka/Core/Events').fire('Database.Connected', conf, connection)
 		}
 		if (!!this.config['default'] && !!this.config['connections'] && this.config.default in this.config['connections']) {
 			this.connections['default'] = this.connections[this.config.default]
 		}
-		this.booted = true;
+		this._booted = true;
 	}
 
-	private function booted (): boolean {
-		return this.booted;
+	public booted (): boolean {
+		return this._booted;
 	}
 
-	public function default ():any {
+	public  default (): Connection {
 		return this.connections['default'];
 	}
 
-	function using (conn): any {
+	using (conn: string): Connection {
 		if (this.connections[conn])
 			return this.connections[conn]
 		else
-			throw new Error(`No database connection exists  with name '${conn}'. Please check your database config.`)
+			throw new TypeError(`No database connection exists  with name '${conn}'. Please check your database config.`)
 	}
 
-	async function close (conn): void {
+	public async close (conn: string) {
 		if (!!this.connections[conn]) {
             await (this.connections[conn]).close()
-            // TODO: fire event (if needed)
+            this.app.use<any>('Haluka/Core/Events').fire('Database.Closed', conn, this.connections[conn])
 
 		}
 	}
 
-	async function closeAll (): void {
+	async closeAll () {
 		for (var conn in _.omit(this.connections, ['default'])) {
             await this.close(conn)
-            // TODO: fire event (if needed)
 		}
 	}
 
+}
+
+export interface IConnectionConfig {
+	username: string
+	password: string
+	host: string
+	port: number | string
+	database: string,
+	options: ConnectOptions
+}
+
+export interface IMongooseConfig {
+	default: string,
+	connections: { [key: string]: IConnectionConfig; }
 }
