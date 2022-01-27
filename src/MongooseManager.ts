@@ -56,33 +56,32 @@ export default class MongooseManager {
 		this._booted = true;
 	}
 
-	private booted (): boolean {
+	public booted (): boolean {
 		return this._booted;
 	}
 
-	public  default ():any {
+	public  default (): Connection {
 		return this.connections['default'];
 	}
 
-	using (conn): any {
+	using (conn: string): Connection {
 		if (this.connections[conn])
 			return this.connections[conn]
 		else
-			throw new Error(`No database connection exists  with name '${conn}'. Please check your database config.`)
+			throw new TypeError(`No database connection exists  with name '${conn}'. Please check your database config.`)
 	}
 
-	async close (conn): void {
+	public async close (conn: string) {
 		if (!!this.connections[conn]) {
             await (this.connections[conn]).close()
-            // TODO: fire event (if needed)
+            this.app.use<any>('Haluka/Core/Events').fire('Database.Closed', conn, this.connections[conn])
 
 		}
 	}
 
-	async closeAll (): void {
+	async closeAll () {
 		for (var conn in _.omit(this.connections, ['default'])) {
             await this.close(conn)
-            // TODO: fire event (if needed)
 		}
 	}
 
