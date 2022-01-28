@@ -38,16 +38,21 @@ export default class MongooseManager {
         this._booted = false;
     }
 
-    private async mongoConnect (conf: IConnectionConfig): Connection {
-        var connString = `mongodb://${conf.username}:${conf.password}@${conf.host}:${conf.port}/${conf.database}`;
-		return await createConnection(connString, Object.assign({ useNewUrlParser: true }, conf.options));
+    private mongoConnect (conf: IConnectionConfig): Connection {
+		let cred = conf.username != "" ? `${conf.username}:${conf.password}@` : '' 
+        let connString = `mongodb+srv://${cred}${conf.host}` + (conf.port != "" ? `:${conf.port}` : '') + `/${conf.database}`
+		return createConnection(connString, Object.assign({ 
+			user: conf.username,
+			pass: conf.password,
+			dbName: conf.database,
+		}, conf.options))
     }
 
-    public async setup () {
+    public setupAll () {
 		// Setup All Database
 		for (var conf in this.config.connections) {
 			var connection = this.config.connections[conf]
-			this.connections[conf] = await this.mongoConnect(connection)
+			this.connections[conf] = this.mongoConnect(connection)
 			this.app.use<any>('Haluka/Core/Events').fire('Database.Connected', conf, connection)
 		}
 		if (!!this.config['default'] && !!this.config['connections'] && this.config.default in this.config['connections']) {

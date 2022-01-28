@@ -15,8 +15,10 @@ describe('MongooseServiceProvider', () => {
 
         let db = use('Mongoose/Manager')
         expect(db).toBeInstanceOf(MongooseManager)
+        
+        expect(() => db.setupAll()).not.toThrow()
 
-        expect(() => await db.setup()).not.toThrow()
+        await db.closeAll()
 
     })
 })
