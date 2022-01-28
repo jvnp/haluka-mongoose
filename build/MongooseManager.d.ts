@@ -23,7 +23,7 @@ export default class MongooseManager {
     protected connections: Connection[];
     constructor(config: IMongooseConfig, app: Application);
     private mongoConnect;
-    setup(): void;
+    setupAll(): void;
     booted(): boolean;
     default(): Connection;
     using(conn: string): Connection;

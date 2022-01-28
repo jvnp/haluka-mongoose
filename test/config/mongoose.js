@@ -47,11 +47,17 @@ module.exports = {
 		mongoose1: {
 
 			// Database Server Info
-			host: env('DB_HOST', 'localhost'),
-			port: env('DB_PORT', '27017'),
+			host: env('DB_HOST', ''),
+			port: env('DB_PORT', ''),
 			database: env('DB_NAME', 'haluka'),
 			username: env('DB_USER', ''),
-			password: env('DB_USER', ''),
+			password: env('DB_PASS', ''),
+			options: {
+				useNewUrlParser: true,
+				useUnifiedTopology: true,
+				retryWrites: true,
+				w: 'majority'
+			}
 		},
 
 	},

@@ -17,10 +17,15 @@ class MongooseManager {
         this._booted = false;
     }
     mongoConnect(conf) {
-        var connString = `mongodb://${conf.username}:${conf.password}@${conf.host}:${conf.port}/${conf.database}`;
-        return (0, mongoose_1.createConnection)(connString, Object.assign({ useNewUrlParser: true }, conf.options));
+        let cred = conf.username != "" ? `${conf.username}:${conf.password}@` : '';
+        let connString = `mongodb+srv://${cred}${conf.host}` + (conf.port != "" ? `:${conf.port}` : '') + `/${conf.database}`;
+        return (0, mongoose_1.createConnection)(connString, Object.assign({
+            user: conf.username,
+            pass: conf.password,
+            dbName: conf.database,
+        }, conf.options));
     }
-    setup() {
+    setupAll() {
         // Setup All Database
         for (var conf in this.config.connections) {
             var connection = this.config.connections[conf];

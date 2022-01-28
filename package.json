@@ -1,7 +1,7 @@
 {
   "name": "haluka-mongoose",
-  "description": "**Mongoose based ODM Provider for Haluka Framework**",
-  "version": "1.0.0",
+  "description": "Mongoose Service Provider for Haluka Framework",
+  "version": "1.0.2",
   "main": "./build/index.js",
   "dependencies": {
     "@haluka/core": "github:halukajs/core",
@@ -23,7 +23,8 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test-o": "ts-node test/test.ts"
   },
   "repository": {
     "type": "git",
