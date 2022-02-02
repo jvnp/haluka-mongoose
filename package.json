@@ -1,14 +1,14 @@
 {
   "name": "haluka-mongoose",
   "description": "Mongoose Service Provider for Haluka Framework",
-  "version": "1.0.2",
+  "version": "2.0.1",
   "main": "./build/index.js",
   "dependencies": {
-    "@haluka/core": "github:halukajs/core",
     "lodash": "^4.17.21",
     "mongoose": "^6.1.8"
   },
   "devDependencies": {
+    "@haluka/core": "^2.0.1",
     "@types/lodash": "^4.14.178",
     "@types/node": "~16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
