@@ -12,7 +12,7 @@ class MongooseServiceProvider extends core_1.ServiceProvider {
      */
     register() {
         this.app.singleton('Mongoose/Manager', function (app) {
-            const mongooseConfig = config('mongoose');
+            const mongooseConfig = config('database.mongoose');
             return new MongooseManager_1.default(mongooseConfig, app);
         });
     }
