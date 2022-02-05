@@ -1,7 +1,7 @@
 {
   "name": "haluka-mongoose",
   "description": "Mongoose Service Provider for Haluka Framework",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "./build/index.js",
   "dependencies": {
     "lodash": "^4.17.21",
