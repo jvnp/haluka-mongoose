@@ -31,11 +31,7 @@ export default class MongooseManager {
     closeAll(): Promise<void>;
 }
 export interface IConnectionConfig {
-    username: string;
-    password: string;
-    host: string;
-    port: number | string;
-    database: string;
+    connString: string;
     options: ConnectOptions;
 }
 export interface IMongooseConfig {
