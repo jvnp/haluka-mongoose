@@ -39,13 +39,9 @@ export default class MongooseManager {
     }
 
     private mongoConnect (conf: IConnectionConfig): Connection {
-		let cred = conf.username != "" ? `${conf.username}:${conf.password}@` : '' 
-        let connString = `mongodb+srv://${cred}${conf.host}` + (conf.port != "" ? `:${conf.port}` : '') + `/${conf.database}`
-		return createConnection(connString, Object.assign({ 
-			user: conf.username,
-			pass: conf.password,
-			dbName: conf.database,
-		}, conf.options))
+		// let cred = conf.username != "" ? `${conf.username}:${conf.password}@` : '' 
+        // let connString = `mongodb+srv://${cred}${conf.host}` + (conf.port != "" ? `:${conf.port}` : '') + `/${conf.database}`
+		return createConnection(conf.connString, conf.options)
     }
 
     public setupAll () {
@@ -93,11 +89,12 @@ export default class MongooseManager {
 }
 
 export interface IConnectionConfig {
-	username: string
-	password: string
-	host: string
-	port: number | string
-	database: string,
+	// username: string
+	// password: string
+	// host: string
+	// port: number | string
+	// database: string,
+	connString: string,
 	options: ConnectOptions
 }
 
